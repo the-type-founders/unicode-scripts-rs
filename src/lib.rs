@@ -22,7 +22,7 @@ pub struct Context {
 pub struct Script {
     /// The ISO 15924 code.
     pub code: &'static str,
-    /// The proper name.
+    /// The proper name in English.
     pub name: &'static str,
     /// The number of codepoints found in the script.
     pub count: usize,
