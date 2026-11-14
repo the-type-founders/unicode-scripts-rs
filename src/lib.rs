@@ -1,4 +1,4 @@
-//! Detection of writing scripts from Unicode codepoints.
+//! Detection of scripts from Unicode codepoints.
 
 #![allow(clippy::type_complexity)]
 
@@ -37,7 +37,7 @@ struct Tree {
 }
 
 impl Context {
-    /// Detect writing scripts given ranges of Unicode codepoints.
+    /// Detect scripts given ranges of Unicode codepoints.
     ///
     /// Each range is closed, containing both the first and the last codepoint. A single codepoint
     /// is given as a range whose ends coincide.

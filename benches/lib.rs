@@ -3,7 +3,7 @@
 extern crate test;
 
 use serde::Deserialize;
-use unicode_writing_script::Context;
+use unicode_scripts::Context;
 
 macro_rules! ok(($result:expr) => ($result.unwrap()));
 

@@ -1,13 +1,14 @@
 [package]
-name = "unicode-writing-script"
+name = "unicode-scripts"
 version = "0.3.0"
 edition = "2024"
 license = "Apache-2.0 OR MIT"
-description = "The package provides detection of writing scripts from Unicode codepoints."
-documentation = "https://docs.rs/unicode-writing-script"
-repository = "https://github.com/the-type-founders/unicode-writing-script"
+authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
+description = "The package provides detection of scripts from Unicode codepoints."
+documentation = "https://docs.rs/unicode-scripts"
+repository = "https://github.com/the-type-founders/unicode-scripts"
 categories = ["text-processing"]
-keywords = ["writing-script", "unicode"]
+keywords = ["writing-system", "unicode"]
 
 [dependencies]
 interavl = "0.6"
