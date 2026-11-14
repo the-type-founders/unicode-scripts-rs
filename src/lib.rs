@@ -53,7 +53,7 @@ impl Context {
 impl Default for Context {
     fn default() -> Self {
         let mut forest = BTreeMap::default();
-        for (name, ranges) in DATA {
+        for (_, name, ranges) in DATA {
             forest.insert(*name, Tree::from(*ranges));
         }
         Self { forest }
@@ -65,8 +65,8 @@ impl From<&[(u32, u32)]> for Tree {
         let mut count = 0;
         let mut backend = IntervalTree::default();
         for (start, end) in ranges.iter().cloned() {
-            count += (end - start + 1) as usize;
-            backend.insert(start..end + 1, ());
+            count += (end - start) as usize;
+            backend.insert(start..end, ());
         }
         Self { count, backend }
     }
@@ -102,14 +102,14 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Cyrillic", 230, 518),
-                ("Emoji", 27, 1589),
-                ("Emoji_Component", 15, 156),
-                ("Greek", 78, 554),
-                ("Inherited", 20, 714),
-                ("Latin", 395, 1528),
+                ("Cyrillic", 230, 508),
+                ("Emoji", 19, 1447),
+                ("Emoji_Component", 12, 146),
+                ("Greek", 73, 520),
+                ("Inherited", 20, 695),
+                ("Latin", 388, 1653),
                 ("PUA", 115, 137468),
-                ("Unknown", 123, 954979),
+                ("Unknown", 115, 941239),
             ],
         );
     }
@@ -121,15 +121,14 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Arabic", 100, 1469),
-                ("Emoji", 21, 1589),
-                ("Emoji_Component", 16, 156),
-                ("Greek", 2, 554),
-                ("Hebrew", 1, 143),
-                ("Inherited", 36, 714),
-                ("Latin", 414, 1528),
+                ("Arabic", 93, 1452),
+                ("Emoji", 15, 1447),
+                ("Emoji_Component", 13, 146),
+                ("Greek", 1, 520),
+                ("Inherited", 34, 695),
+                ("Latin", 407, 1653),
                 ("PUA", 5, 137468),
-                ("Unknown", 8, 954979),
+                ("Unknown", 5, 941239),
             ],
         );
     }
@@ -141,15 +140,14 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Arabic", 1, 1469),
-                ("Devanagari", 125, 169),
-                ("Emoji", 21, 1589),
-                ("Emoji_Component", 16, 156),
-                ("Greek", 2, 554),
-                ("Inherited", 27, 714),
-                ("Latin", 391, 1528),
+                ("Devanagari", 123, 165),
+                ("Emoji", 15, 1447),
+                ("Emoji_Component", 13, 146),
+                ("Greek", 1, 520),
+                ("Inherited", 26, 695),
+                ("Latin", 384, 1653),
                 ("PUA", 4, 137468),
-                ("Unknown", 7, 954979),
+                ("Unknown", 4, 941239),
             ],
         );
     }
@@ -161,15 +159,14 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Emoji", 22, 1589),
-                ("Emoji_Component", 17, 156),
-                ("Greek", 2, 554),
-                ("Hangul", 11281, 11753),
-                ("Inherited", 23, 714),
-                ("Katakana", 1, 335),
-                ("Latin", 391, 1528),
+                ("Emoji", 15, 1447),
+                ("Emoji_Component", 13, 146),
+                ("Greek", 1, 520),
+                ("Hangul", 11280, 11739),
+                ("Inherited", 22, 695),
+                ("Latin", 384, 1653),
                 ("PUA", 4, 137468),
-                ("Unknown", 10, 954979),
+                ("Unknown", 4, 941239),
             ],
         );
     }
@@ -181,14 +178,14 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Emoji", 21, 1589),
-                ("Emoji_Component", 17, 156),
-                ("Greek", 2, 554),
-                ("Hebrew", 88, 143),
-                ("Inherited", 23, 714),
-                ("Latin", 401, 1528),
+                ("Emoji", 15, 1447),
+                ("Emoji_Component", 13, 146),
+                ("Greek", 1, 520),
+                ("Hebrew", 88, 136),
+                ("Inherited", 22, 695),
+                ("Latin", 394, 1653),
                 ("PUA", 4, 137468),
-                ("Unknown", 14, 954979),
+                ("Unknown", 4, 941239),
             ],
         );
     }
@@ -200,15 +197,14 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Devanagari", 1, 169),
-                ("Emoji", 21, 1589),
-                ("Emoji_Component", 16, 156),
-                ("Greek", 2, 554),
-                ("Inherited", 22, 714),
-                ("Latin", 409, 1528),
+                ("Emoji", 15, 1447),
+                ("Emoji_Component", 13, 146),
+                ("Greek", 1, 520),
+                ("Inherited", 22, 695),
+                ("Latin", 402, 1653),
                 ("PUA", 4, 137468),
-                ("Tamil", 72, 141),
-                ("Unknown", 23, 954979),
+                ("Tamil", 72, 123),
+                ("Unknown", 4, 941239),
             ],
         );
     }
@@ -220,14 +216,14 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Emoji", 21, 1589),
-                ("Emoji_Component", 16, 156),
-                ("Greek", 2, 554),
-                ("Inherited", 22, 714),
-                ("Latin", 391, 1528),
+                ("Emoji", 15, 1447),
+                ("Emoji_Component", 13, 146),
+                ("Greek", 1, 520),
+                ("Inherited", 22, 695),
+                ("Latin", 384, 1653),
                 ("PUA", 4, 137468),
-                ("Thai", 86, 88),
-                ("Unknown", 9, 954979),
+                ("Thai", 86, 86),
+                ("Unknown", 4, 941239),
             ],
         );
     }
