@@ -12,7 +12,7 @@ categories = ["text-processing"]
 keywords = ["writing-script", "unicode"]
 
 [dependencies]
-interavl = "0.3"
+interavl = "0.6"
 
 [build-dependencies]
 serde = { version = "1", features = ["derive"] }
