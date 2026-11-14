@@ -20,19 +20,25 @@ fn main() {
     let data: Vec<Script> = ok!(serde_json::from_str(DATA));
     let data = data
         .into_iter()
-        .map(|Script { code, name, mut ranges }| {
-            ranges.sort();
-            let ranges = ranges
-                .into_iter()
-                .map(|range| format!("({},{})", range[0], range[1]))
-                .collect::<Vec<_>>()
-                .join(",");
-            if let Some(code) = code {
-                format!(r#"(Some("{code}"), "{name}", &[{ranges}])"#)
-            } else {
-                format!(r#"(None, "{name}", &[{ranges}])"#)
-            }
-        })
+        .map(
+            |Script {
+                 code,
+                 name,
+                 mut ranges,
+             }| {
+                ranges.sort();
+                let ranges = ranges
+                    .into_iter()
+                    .map(|range| format!("({},{})", range[0], range[1]))
+                    .collect::<Vec<_>>()
+                    .join(",");
+                if let Some(code) = code {
+                    format!(r#"(Some("{code}"), "{name}", &[{ranges}])"#)
+                } else {
+                    format!(r#"(None, "{name}", &[{ranges}])"#)
+                }
+            },
+        )
         .collect::<Vec<_>>()
         .join(",");
     ok!(write!(
