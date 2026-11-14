@@ -11,12 +11,16 @@ include!(concat!(env!("OUT_DIR"), "/data.rs"));
 /// A context.
 #[derive(Clone)]
 pub struct Context {
-    forest: BTreeMap<&'static str, Tree>,
+    scripts: Vec<(&'static str, &'static str, Tree)>,
 }
 
 /// A script.
 #[derive(Clone, Copy, Default)]
 pub struct Script {
+    /// The ISO 15924 code.
+    pub code: &'static str,
+    /// The proper name.
+    pub name: &'static str,
     /// The number of codepoints found in the script.
     pub count: usize,
     /// The total number of codepoints in the script.
@@ -40,10 +44,12 @@ impl Context {
     {
         let mut scripts: BTreeMap<&'static str, Script> = Default::default();
         for [start, end] in codepoints {
-            for (name, tree) in self.forest.iter() {
+            for (code, name, tree) in self.scripts.iter() {
                 for (range, _) in tree.backend.iter_overlaps(&(start..end + 1)) {
                     let count = range.end.min(end + 1) - range.start.max(start);
-                    let script = scripts.entry(*name).or_insert_with(|| Script {
+                    let script = scripts.entry(*code).or_insert_with(|| Script {
+                        code,
+                        name,
                         count: 0,
                         total: tree.count,
                     });
@@ -57,11 +63,13 @@ impl Context {
 
 impl Default for Context {
     fn default() -> Self {
-        let mut forest = BTreeMap::default();
-        for (_, name, ranges) in DATA {
-            forest.insert(*name, Tree::from(*ranges));
+        Self {
+            scripts: DATA
+                .iter()
+                .cloned()
+                .map(|(code, name, ranges)| (code, name, Tree::from(ranges)))
+                .collect(),
         }
-        Self { forest }
     }
 }
 
@@ -215,10 +223,11 @@ mod tests {
     fn compare(codepoints: &str, expected: Vec<(&str, usize, usize)>) {
         let codepoints: Vec<Range> = ok!(serde_json::from_str(codepoints));
         let results = Context::default().detect(codepoints.into_iter().map(Into::into));
-        let actual = results
+        let mut actual = results
             .into_iter()
-            .map(|(name, script)| (name, script.count, script.total))
+            .map(|(_, script)| (script.name, script.count, script.total))
             .collect::<Vec<_>>();
+        actual.sort();
         assert_eq!(actual, expected);
     }
 }
