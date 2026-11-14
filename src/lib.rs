@@ -1,5 +1,7 @@
 //! Detection of writing scripts from Unicode codepoints.
 
+#![allow(clippy::type_complexity)]
+
 use std::collections::BTreeMap;
 
 use interavl::IntervalTree;
