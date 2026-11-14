@@ -10,27 +10,26 @@ on:
   workflow_dispatch:
 
 jobs:
+  benchmark:
+    name: Run the benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: rustup toolchain install nightly --profile=minimal
+      - run: make benchmark
+
   check:
     name: Run the checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - run: rustup toolchain install stable --profile=minimal --component=clippy --component=rustfmt
-      - run: cargo clippy -- -D warnings
-      - run: cargo fmt --all -- --check
-
-  bench:
-    name: Run the benchmarks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - run: rustup toolchain install nightly --profile=minimal
-      - run: cargo +nightly bench
+      - uses: actions/checkout@v7
+      - run: rustup toolchain install stable --profile=minimal --component clippy --component rustfmt
+      - run: make check
 
   test:
     name: Run the tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - run: rustup toolchain install stable --profile=minimal
-      - run: cargo test
+      - run: make test
