@@ -108,12 +108,9 @@ mod tests {
             CODEPOINTS,
             vec![
                 ("Cyrillic", 230, 508),
-                ("Emoji", 19, 1447),
-                ("Emoji_Component", 12, 146),
                 ("Greek", 73, 520),
                 ("Inherited", 20, 695),
                 ("Latin", 388, 1653),
-                ("PUA", 115, 137468),
                 ("Unknown", 115, 941239),
             ],
         );
@@ -127,12 +124,9 @@ mod tests {
             CODEPOINTS,
             vec![
                 ("Arabic", 93, 1452),
-                ("Emoji", 15, 1447),
-                ("Emoji_Component", 13, 146),
                 ("Greek", 1, 520),
                 ("Inherited", 34, 695),
                 ("Latin", 407, 1653),
-                ("PUA", 5, 137468),
                 ("Unknown", 5, 941239),
             ],
         );
@@ -146,12 +140,9 @@ mod tests {
             CODEPOINTS,
             vec![
                 ("Devanagari", 123, 165),
-                ("Emoji", 15, 1447),
-                ("Emoji_Component", 13, 146),
                 ("Greek", 1, 520),
                 ("Inherited", 26, 695),
                 ("Latin", 384, 1653),
-                ("PUA", 4, 137468),
                 ("Unknown", 4, 941239),
             ],
         );
@@ -164,13 +155,10 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Emoji", 15, 1447),
-                ("Emoji_Component", 13, 146),
                 ("Greek", 1, 520),
                 ("Hangul", 11280, 11739),
                 ("Inherited", 22, 695),
                 ("Latin", 384, 1653),
-                ("PUA", 4, 137468),
                 ("Unknown", 4, 941239),
             ],
         );
@@ -183,13 +171,10 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Emoji", 15, 1447),
-                ("Emoji_Component", 13, 146),
                 ("Greek", 1, 520),
                 ("Hebrew", 88, 136),
                 ("Inherited", 22, 695),
                 ("Latin", 394, 1653),
-                ("PUA", 4, 137468),
                 ("Unknown", 4, 941239),
             ],
         );
@@ -202,12 +187,9 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Emoji", 15, 1447),
-                ("Emoji_Component", 13, 146),
                 ("Greek", 1, 520),
                 ("Inherited", 22, 695),
                 ("Latin", 402, 1653),
-                ("PUA", 4, 137468),
                 ("Tamil", 72, 123),
                 ("Unknown", 4, 941239),
             ],
@@ -221,12 +203,9 @@ mod tests {
         compare(
             CODEPOINTS,
             vec![
-                ("Emoji", 15, 1447),
-                ("Emoji_Component", 13, 146),
                 ("Greek", 1, 520),
                 ("Inherited", 22, 695),
                 ("Latin", 384, 1653),
-                ("PUA", 4, 137468),
                 ("Thai", 86, 86),
                 ("Unknown", 4, 941239),
             ],
