@@ -27,6 +27,7 @@ fn noto_sans_gothic() {
     compare(
         CODEPOINTS,
         vec![
+            ("Common", 90, 9276),
             ("Gothic", 27, 27),
             ("Inherited", 17, 695),
             ("Latin", 231, 1653),
@@ -40,6 +41,7 @@ fn proxima_nova() {
     compare(
         CODEPOINTS,
         vec![
+            ("Common", 210, 9276),
             ("Cyrillic", 230, 508),
             ("Greek", 73, 520),
             ("Inherited", 20, 695),
@@ -56,6 +58,7 @@ fn proxima_nova_arabic() {
         CODEPOINTS,
         vec![
             ("Arabic", 93, 1452),
+            ("Common", 188, 9276),
             ("Greek", 1, 520),
             ("Inherited", 34, 695),
             ("Latin", 407, 1653),
@@ -70,6 +73,7 @@ fn proxima_nova_devanagari() {
     compare(
         CODEPOINTS,
         vec![
+            ("Common", 177, 9276),
             ("Devanagari", 123, 165),
             ("Greek", 1, 520),
             ("Inherited", 26, 695),
@@ -85,6 +89,7 @@ fn proxima_nova_hangeul() {
     compare(
         CODEPOINTS,
         vec![
+            ("Common", 251, 9276),
             ("Greek", 1, 520),
             ("Hangul", 11280, 11739),
             ("Inherited", 22, 695),
@@ -100,6 +105,7 @@ fn proxima_nova_hebrew() {
     compare(
         CODEPOINTS,
         vec![
+            ("Common", 177, 9276),
             ("Greek", 1, 520),
             ("Hebrew", 88, 136),
             ("Inherited", 22, 695),
@@ -115,6 +121,7 @@ fn proxima_nova_tamil() {
     compare(
         CODEPOINTS,
         vec![
+            ("Common", 177, 9276),
             ("Greek", 1, 520),
             ("Inherited", 22, 695),
             ("Latin", 402, 1653),
@@ -130,6 +137,7 @@ fn proxima_nova_thai() {
     compare(
         CODEPOINTS,
         vec![
+            ("Common", 176, 9276),
             ("Greek", 1, 520),
             ("Inherited", 22, 695),
             ("Latin", 384, 1653),

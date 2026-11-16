@@ -47,9 +47,6 @@ for range, name in read("Scripts.txt"):
     scripts.setdefault(name, []).append([start, end])
 scripts = {name: merge(ranges) for name, ranges in scripts.items()}
 
-# Common is not a script of its own; it is shared by many.
-del scripts["Common"]
-
 data = [{"code": codes[name], "name": name, "ranges": ranges} for name, ranges in sorted(scripts.items())]
 json.dump(data, sys.stdout, indent=2)
 sys.stdout.write("\n")
