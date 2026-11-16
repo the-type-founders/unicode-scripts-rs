@@ -11,9 +11,6 @@ VERSION = "18.0.0"
 
 ROOT = f"https://www.unicode.org/Public/{VERSION}/ucd"
 
-# The number of codepoints in Unicode.
-LIMIT = 0x110000
-
 
 def read(name):
     with urlopen(f"{ROOT}/{name}") as response:
@@ -49,17 +46,6 @@ for range, name in read("Scripts.txt"):
     end = int(end or range, 16) + 1
     scripts.setdefault(name, []).append([start, end])
 scripts = {name: merge(ranges) for name, ranges in scripts.items()}
-
-# The codepoints that are not listed belong to Unknown.
-unknown = []
-cursor = 0
-for start, end in merge(range for ranges in scripts.values() for range in ranges):
-    if cursor < start:
-        unknown.append([cursor, start])
-    cursor = end
-if cursor < LIMIT:
-    unknown.append([cursor, LIMIT])
-scripts["Unknown"] = unknown
 
 # Common is not a script of its own; it is shared by many.
 del scripts["Common"]
