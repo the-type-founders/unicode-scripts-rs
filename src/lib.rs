@@ -53,7 +53,7 @@ impl Context {
             .scripts
             .iter()
             .zip(counts)
-            .filter(|((_, _, total, _), count)| {
+            .filter(|((.., total, _), count)| {
                 *count > 0 && *count as f64 / *total as f64 >= threshold
             })
             .map(|(&(code, name, total, _), count)| Script {
