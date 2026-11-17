@@ -10,9 +10,6 @@ repository = "https://github.com/the-type-founders/unicode-scripts-rs"
 categories = ["text-processing"]
 keywords = ["script", "unicode", "writing-system"]
 
-[dependencies]
-interavl = "0.6"
-
 [build-dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

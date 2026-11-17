@@ -5,15 +5,12 @@
 #[cfg(test)]
 mod tests;
 
-use interavl::IntervalTree;
-
 include!(concat!(env!("OUT_DIR"), "/data.rs"));
 
 /// A context.
-#[derive(Clone, Debug)]
-pub struct Context {
-    scripts: Vec<(&'static str, &'static str, usize, IntervalTree<u32, ()>)>,
-}
+#[derive(Clone, Debug, Default)]
+#[non_exhaustive]
+pub struct Context {}
 
 /// A script.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -41,16 +38,21 @@ impl Context {
     where
         T: IntoIterator<Item = [u32; 2]>,
     {
-        let mut counts = vec![0; self.scripts.len()];
+        let mut counts = vec![0; DATA.len()];
         for [start, end] in codepoints {
-            for (count, (.., ranges)) in counts.iter_mut().zip(self.scripts.iter()) {
-                for (range, _) in ranges.iter_overlaps(&(start..end + 1)) {
-                    *count += (range.end.min(end + 1) - range.start.max(start)) as usize;
+            for (count, (.., ranges)) in counts.iter_mut().zip(DATA) {
+                // The ranges are sorted and do not overlap; skip those lying before.
+                let index = ranges.partition_point(|(_, upper)| *upper <= start);
+                for (lower, upper) in ranges[index..].iter().cloned() {
+                    // The rest lies beyond.
+                    if end < lower {
+                        break;
+                    }
+                    *count += ((end + 1).min(upper) - start.max(lower)) as usize;
                 }
             }
         }
-        let mut scripts = self
-            .scripts
+        let mut scripts = DATA
             .iter()
             .zip(counts)
             .filter(|((.., total, _), count)| {
@@ -69,23 +71,5 @@ impl Context {
                 .then_with(|| one.code.cmp(other.code))
         });
         scripts
-    }
-}
-
-impl Default for Context {
-    fn default() -> Self {
-        Self {
-            scripts: DATA
-                .iter()
-                .cloned()
-                .map(|(code, name, total, ranges)| {
-                    let mut tree = IntervalTree::default();
-                    for (start, end) in ranges.iter().cloned() {
-                        tree.insert(start..end, ());
-                    }
-                    (code, name, total, tree)
-                })
-                .collect(),
-        }
     }
 }
