@@ -12,13 +12,13 @@ use interavl::IntervalTree;
 include!(concat!(env!("OUT_DIR"), "/data.rs"));
 
 /// A context.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Context {
     scripts: Vec<(&'static str, &'static str, Tree)>,
 }
 
 /// A script.
-#[derive(Clone, Copy, Default)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Script {
     /// The ISO 15924 code.
     pub code: &'static str,
@@ -30,7 +30,7 @@ pub struct Script {
     pub total: usize,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Tree {
     count: usize,
     backend: IntervalTree<u32, ()>,
