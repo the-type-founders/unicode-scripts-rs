@@ -6,11 +6,8 @@ import json
 import sys
 from urllib.request import urlopen
 
-# Update this to upgrade to a new release of the Unicode standard.
 VERSION = "18.0.0"
-
 ROOT = f"https://www.unicode.org/Public/{VERSION}/ucd"
-
 
 # The marker of a line giving the value of the codepoints that are not listed.
 MISSING = "# @missing:"
@@ -28,12 +25,6 @@ def read(name):
                 yield missing, [field.strip() for field in line.split(";")]
 
 
-def parse(range):
-    start, _, end = range.partition("..")
-    # The upper bound is exclusive.
-    return [int(start, 16), int(end or start, 16) + 1]
-
-
 def merge(ranges):
     result = []
     for start, end in sorted(ranges):
@@ -42,6 +33,12 @@ def merge(ranges):
         else:
             result.append([start, end])
     return result
+
+
+def parse(range):
+    start, _, end = range.partition("..")
+    # The upper bound is exclusive.
+    return [int(start, 16), int(end or start, 16) + 1]
 
 
 def subtract(range, ranges):
@@ -56,8 +53,8 @@ def subtract(range, ranges):
     return result
 
 
-# Map the long names of scripts onto their ISO 15924 codes. The first alias is the code; the ones
-# after the long name, if any, are deprecated.
+# Map the long names of scripts onto their ISO 15924 codes. The first alias is
+# the code; the ones after the long name, if any, are deprecated.
 codes = {}
 for missing, (property, code, name, *_) in read("PropertyValueAliases.txt"):
     if not missing and property == "sc":
@@ -76,6 +73,9 @@ for range, name in defaults:
     scripts.setdefault(name, []).extend(subtract(range, listed))
 scripts = {name: merge(ranges) for name, ranges in scripts.items()}
 
-data = [{"code": codes[name], "name": name, "ranges": ranges} for name, ranges in sorted(scripts.items())]
+data = [
+    {"code": codes[name], "name": name, "ranges": ranges}
+    for name, ranges in sorted(scripts.items())
+]
 json.dump(data, sys.stdout, indent=2)
 sys.stdout.write("\n")
