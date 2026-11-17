@@ -75,7 +75,8 @@ scripts = {name: merge(ranges) for name, ranges in scripts.items()}
 
 data = [
     {"code": codes[name], "name": name, "ranges": ranges}
-    for name, ranges in sorted(scripts.items())
+    for name, ranges in scripts.items()
 ]
+data.sort(key=lambda script: script["code"])
 json.dump(data, sys.stdout, indent=2)
 sys.stdout.write("\n")

@@ -42,8 +42,8 @@ fn proxima_nova() {
         CODEPOINTS,
         vec![
             ("Cyrillic", 230, 508),
-            ("Latin", 388, 1653),
             ("Greek", 73, 520),
+            ("Latin", 388, 1653),
             ("Inherited", 20, 695),
             ("Common", 210, 9276),
             ("Unknown", 115, 941239),
@@ -58,11 +58,11 @@ fn proxima_nova_arabic() {
     compare(
         CODEPOINTS,
         vec![
-            ("Latin", 407, 1653),
             ("Arabic", 93, 1452),
+            ("Greek", 1, 520),
+            ("Latin", 407, 1653),
             ("Inherited", 34, 695),
             ("Common", 188, 9276),
-            ("Greek", 1, 520),
             ("Unknown", 5, 941239),
         ],
     );
@@ -76,10 +76,10 @@ fn proxima_nova_devanagari() {
         CODEPOINTS,
         vec![
             ("Devanagari", 123, 165),
+            ("Greek", 1, 520),
             ("Latin", 384, 1653),
             ("Inherited", 26, 695),
             ("Common", 177, 9276),
-            ("Greek", 1, 520),
             ("Unknown", 4, 941239),
         ],
     );
@@ -92,11 +92,11 @@ fn proxima_nova_hangeul() {
     compare(
         CODEPOINTS,
         vec![
+            ("Greek", 1, 520),
             ("Hangul", 11280, 11739),
             ("Latin", 384, 1653),
             ("Inherited", 22, 695),
             ("Common", 251, 9276),
-            ("Greek", 1, 520),
             ("Unknown", 4, 941239),
         ],
     );
@@ -109,11 +109,11 @@ fn proxima_nova_hebrew() {
     compare(
         CODEPOINTS,
         vec![
+            ("Greek", 1, 520),
             ("Hebrew", 88, 136),
             ("Latin", 394, 1653),
             ("Inherited", 22, 695),
             ("Common", 177, 9276),
-            ("Greek", 1, 520),
             ("Unknown", 4, 941239),
         ],
     );
@@ -126,11 +126,11 @@ fn proxima_nova_tamil() {
     compare(
         CODEPOINTS,
         vec![
-            ("Tamil", 72, 123),
+            ("Greek", 1, 520),
             ("Latin", 402, 1653),
+            ("Tamil", 72, 123),
             ("Inherited", 22, 695),
             ("Common", 177, 9276),
-            ("Greek", 1, 520),
             ("Unknown", 4, 941239),
         ],
     );
@@ -143,11 +143,11 @@ fn proxima_nova_thai() {
     compare(
         CODEPOINTS,
         vec![
-            ("Thai", 86, 86),
+            ("Greek", 1, 520),
             ("Latin", 384, 1653),
+            ("Thai", 86, 86),
             ("Inherited", 22, 695),
             ("Common", 176, 9276),
-            ("Greek", 1, 520),
             ("Unknown", 4, 941239),
         ],
     );
@@ -161,7 +161,7 @@ fn order() {
         .into_iter()
         .map(|script| script.code)
         .collect::<Vec<_>>();
-    // The scripts that are equally covered are sorted by code.
+    // The scripts are sorted by code irrespective of how well they are covered.
     assert_eq!(codes, ["Dsrt", "Goth", "Latn"]);
 }
 
