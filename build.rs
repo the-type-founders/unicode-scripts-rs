@@ -20,20 +20,27 @@ fn main() {
     let data: Vec<Script> = ok!(serde_json::from_str(DATA));
     let data = data
         .into_iter()
-        .map(|mut script| {
-            script.ranges.sort();
+        .map(|script| {
+            let total = script
+                .ranges
+                .iter()
+                .map(|[start, end]| (end - start) as usize)
+                .sum::<usize>();
             let ranges = script
                 .ranges
                 .into_iter()
-                .map(|range| format!("({},{})", range[0], range[1]))
+                .map(|[start, end]| format!("({start},{end})"))
                 .collect::<Vec<_>>()
                 .join(",");
-            format!(r#"("{}", "{}", &[{ranges}])"#, script.code, script.name)
+            format!(
+                "({:?}, {:?}, {total}, &[{ranges}])",
+                script.code, script.name,
+            )
         })
         .collect::<Vec<_>>()
         .join(",");
     ok!(write!(
         file,
-        "const DATA: &[(&str, &str, &[(u32, u32)])] = &[{data}];",
+        "const DATA: &[(&str, &str, usize, &[(u32, u32)])] = &[{data}];",
     ));
 }

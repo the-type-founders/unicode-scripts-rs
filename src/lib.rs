@@ -14,7 +14,7 @@ include!(concat!(env!("OUT_DIR"), "/data.rs"));
 /// A context.
 #[derive(Clone, Debug)]
 pub struct Context {
-    scripts: Vec<(&'static str, &'static str, Tree)>,
+    scripts: Vec<(&'static str, &'static str, usize, IntervalTree<u32, ()>)>,
 }
 
 /// A script.
@@ -30,12 +30,6 @@ pub struct Script {
     pub total: usize,
 }
 
-#[derive(Clone, Debug)]
-struct Tree {
-    count: usize,
-    backend: IntervalTree<u32, ()>,
-}
-
 impl Context {
     /// Detect scripts given ranges of Unicode codepoints.
     ///
@@ -47,14 +41,14 @@ impl Context {
     {
         let mut scripts: BTreeMap<&'static str, Script> = Default::default();
         for [start, end] in codepoints {
-            for (code, name, tree) in self.scripts.iter() {
-                for (range, _) in tree.backend.iter_overlaps(&(start..end + 1)) {
+            for (code, name, total, ranges) in self.scripts.iter() {
+                for (range, _) in ranges.iter_overlaps(&(start..end + 1)) {
                     let count = range.end.min(end + 1) - range.start.max(start);
                     let script = scripts.entry(*code).or_insert_with(|| Script {
                         code,
                         name,
                         count: 0,
-                        total: tree.count,
+                        total: *total,
                     });
                     script.count += count as usize;
                 }
@@ -70,20 +64,14 @@ impl Default for Context {
             scripts: DATA
                 .iter()
                 .cloned()
-                .map(|(code, name, ranges)| (code, name, Tree::from(ranges)))
+                .map(|(code, name, total, ranges)| {
+                    let mut tree = IntervalTree::default();
+                    for (start, end) in ranges.iter().cloned() {
+                        tree.insert(start..end, ());
+                    }
+                    (code, name, total, tree)
+                })
                 .collect(),
         }
-    }
-}
-
-impl From<&[(u32, u32)]> for Tree {
-    fn from(ranges: &[(u32, u32)]) -> Self {
-        let mut count = 0;
-        let mut backend = IntervalTree::default();
-        for (start, end) in ranges.iter().cloned() {
-            count += (end - start) as usize;
-            backend.insert(start..end, ());
-        }
-        Self { count, backend }
     }
 }
