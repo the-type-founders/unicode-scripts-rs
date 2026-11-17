@@ -157,8 +157,8 @@ fn compare(codepoints: &str, expected: Vec<(&str, usize, usize)>) {
     let codepoints: Vec<Range> = ok!(serde_json::from_str(codepoints));
     let results = Context::default().detect(codepoints.into_iter().map(Into::into));
     let mut actual = results
-        .into_iter()
-        .map(|(_, script)| (script.name, script.count, script.total))
+        .into_values()
+        .map(|script| (script.name, script.count, script.total))
         .collect::<Vec<_>>();
     actual.sort();
     assert_eq!(actual, expected);
