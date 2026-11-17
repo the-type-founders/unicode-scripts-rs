@@ -35,7 +35,10 @@ impl Context {
     ///
     /// Each range is closed, containing both the first and the last codepoint. A single codepoint
     /// is given as a range whose ends coincide.
-    pub fn detect<T>(&self, codepoints: T) -> BTreeMap<&'static str, Script>
+    ///
+    /// The threshold is the minimum share of the codepoints of a script, from zero to one, that
+    /// should be found for the script to be reported.
+    pub fn detect<T>(&self, codepoints: T, threshold: f64) -> BTreeMap<&'static str, Script>
     where
         T: IntoIterator<Item = [u32; 2]>,
     {
@@ -54,6 +57,7 @@ impl Context {
                 }
             }
         }
+        scripts.retain(|_, script| script.count as f64 / script.total as f64 >= threshold);
         scripts
     }
 }

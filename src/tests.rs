@@ -153,9 +153,24 @@ fn proxima_nova_thai() {
     );
 }
 
+#[test]
+fn threshold() {
+    let context = Context::default();
+    // All Gothic letters but the last one are given along with a single Latin one.
+    let codes = |threshold| {
+        context
+            .detect([[0x61, 0x61], [0x10330, 0x10349]], threshold)
+            .into_keys()
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(codes(0.0), ["Goth", "Latn"]);
+    assert_eq!(codes(0.9), ["Goth"]);
+    assert!(codes(1.0).is_empty());
+}
+
 fn compare(codepoints: &str, expected: Vec<(&str, usize, usize)>) {
     let codepoints: Vec<Range> = ok!(serde_json::from_str(codepoints));
-    let results = Context::default().detect(codepoints.into_iter().map(Into::into));
+    let results = Context::default().detect(codepoints.into_iter().map(Into::into), 0.0);
     let mut actual = results
         .into_values()
         .map(|script| (script.name, script.count, script.total))

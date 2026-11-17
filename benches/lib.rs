@@ -30,5 +30,5 @@ fn detect(bencher: &mut test::Bencher) {
     let codepoints: Vec<Range> = ok!(serde_json::from_str(CODEPOINTS));
     let codepoints = codepoints.into_iter().map(Into::into).collect::<Vec<_>>();
     let context = Context::default();
-    bencher.iter(|| test::black_box(context.detect(codepoints.iter().cloned())));
+    bencher.iter(|| test::black_box(context.detect(codepoints.iter().cloned(), 0.0)));
 }
