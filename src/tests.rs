@@ -46,6 +46,7 @@ fn proxima_nova() {
             ("Greek", 73, 520),
             ("Inherited", 20, 695),
             ("Latin", 388, 1653),
+            ("Unknown", 115, 941239),
         ],
     );
 }
@@ -62,6 +63,7 @@ fn proxima_nova_arabic() {
             ("Greek", 1, 520),
             ("Inherited", 34, 695),
             ("Latin", 407, 1653),
+            ("Unknown", 5, 941239),
         ],
     );
 }
@@ -78,6 +80,7 @@ fn proxima_nova_devanagari() {
             ("Greek", 1, 520),
             ("Inherited", 26, 695),
             ("Latin", 384, 1653),
+            ("Unknown", 4, 941239),
         ],
     );
 }
@@ -94,6 +97,7 @@ fn proxima_nova_hangeul() {
             ("Hangul", 11280, 11739),
             ("Inherited", 22, 695),
             ("Latin", 384, 1653),
+            ("Unknown", 4, 941239),
         ],
     );
 }
@@ -110,6 +114,7 @@ fn proxima_nova_hebrew() {
             ("Hebrew", 88, 136),
             ("Inherited", 22, 695),
             ("Latin", 394, 1653),
+            ("Unknown", 4, 941239),
         ],
     );
 }
@@ -126,6 +131,7 @@ fn proxima_nova_tamil() {
             ("Inherited", 22, 695),
             ("Latin", 402, 1653),
             ("Tamil", 72, 123),
+            ("Unknown", 4, 941239),
         ],
     );
 }
@@ -142,6 +148,7 @@ fn proxima_nova_thai() {
             ("Inherited", 22, 695),
             ("Latin", 384, 1653),
             ("Thai", 86, 86),
+            ("Unknown", 4, 941239),
         ],
     );
 }
