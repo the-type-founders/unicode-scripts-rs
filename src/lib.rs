@@ -5,8 +5,6 @@
 #[cfg(test)]
 mod tests;
 
-use std::collections::BTreeMap;
-
 use interavl::IntervalTree;
 
 include!(concat!(env!("OUT_DIR"), "/data.rs"));
@@ -37,27 +35,39 @@ impl Context {
     /// is given as a range whose ends coincide. The ranges should not overlap.
     ///
     /// The threshold is the minimum share of the codepoints of a script, from zero to one, that
-    /// should be found for the script to be reported.
-    pub fn detect<T>(&self, codepoints: T, threshold: f64) -> BTreeMap<&'static str, Script>
+    /// should be found for the script to be reported. The scripts are sorted by this share in
+    /// descending order with ties broken by code.
+    pub fn detect<T>(&self, codepoints: T, threshold: f64) -> Vec<Script>
     where
         T: IntoIterator<Item = [u32; 2]>,
     {
-        let mut scripts: BTreeMap<&'static str, Script> = Default::default();
+        let mut counts = vec![0; self.scripts.len()];
         for [start, end] in codepoints {
-            for (code, name, total, ranges) in self.scripts.iter() {
+            for (count, (.., ranges)) in counts.iter_mut().zip(self.scripts.iter()) {
                 for (range, _) in ranges.iter_overlaps(&(start..end + 1)) {
-                    let count = range.end.min(end + 1) - range.start.max(start);
-                    let script = scripts.entry(*code).or_insert_with(|| Script {
-                        code,
-                        name,
-                        count: 0,
-                        total: *total,
-                    });
-                    script.count += count as usize;
+                    *count += (range.end.min(end + 1) - range.start.max(start)) as usize;
                 }
             }
         }
-        scripts.retain(|_, script| script.count as f64 / script.total as f64 >= threshold);
+        let mut scripts = self
+            .scripts
+            .iter()
+            .zip(counts)
+            .filter(|((_, _, total, _), count)| {
+                *count > 0 && *count as f64 / *total as f64 >= threshold
+            })
+            .map(|(&(code, name, total, _), count)| Script {
+                code,
+                name,
+                count,
+                total,
+            })
+            .collect::<Vec<_>>();
+        scripts.sort_by(|one, other| {
+            (other.count * one.total)
+                .cmp(&(one.count * other.total))
+                .then_with(|| one.code.cmp(other.code))
+        });
         scripts
     }
 }

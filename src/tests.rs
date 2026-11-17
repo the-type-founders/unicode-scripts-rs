@@ -27,10 +27,10 @@ fn noto_sans_gothic() {
     compare(
         CODEPOINTS,
         vec![
-            ("Common", 90, 9276),
             ("Gothic", 27, 27),
-            ("Inherited", 17, 695),
             ("Latin", 231, 1653),
+            ("Inherited", 17, 695),
+            ("Common", 90, 9276),
         ],
     );
 }
@@ -41,11 +41,11 @@ fn proxima_nova() {
     compare(
         CODEPOINTS,
         vec![
-            ("Common", 210, 9276),
             ("Cyrillic", 230, 508),
+            ("Latin", 388, 1653),
             ("Greek", 73, 520),
             ("Inherited", 20, 695),
-            ("Latin", 388, 1653),
+            ("Common", 210, 9276),
             ("Unknown", 115, 941239),
         ],
     );
@@ -58,11 +58,11 @@ fn proxima_nova_arabic() {
     compare(
         CODEPOINTS,
         vec![
+            ("Latin", 407, 1653),
             ("Arabic", 93, 1452),
+            ("Inherited", 34, 695),
             ("Common", 188, 9276),
             ("Greek", 1, 520),
-            ("Inherited", 34, 695),
-            ("Latin", 407, 1653),
             ("Unknown", 5, 941239),
         ],
     );
@@ -75,11 +75,11 @@ fn proxima_nova_devanagari() {
     compare(
         CODEPOINTS,
         vec![
-            ("Common", 177, 9276),
             ("Devanagari", 123, 165),
-            ("Greek", 1, 520),
-            ("Inherited", 26, 695),
             ("Latin", 384, 1653),
+            ("Inherited", 26, 695),
+            ("Common", 177, 9276),
+            ("Greek", 1, 520),
             ("Unknown", 4, 941239),
         ],
     );
@@ -92,11 +92,11 @@ fn proxima_nova_hangeul() {
     compare(
         CODEPOINTS,
         vec![
+            ("Hangul", 11280, 11739),
+            ("Latin", 384, 1653),
+            ("Inherited", 22, 695),
             ("Common", 251, 9276),
             ("Greek", 1, 520),
-            ("Hangul", 11280, 11739),
-            ("Inherited", 22, 695),
-            ("Latin", 384, 1653),
             ("Unknown", 4, 941239),
         ],
     );
@@ -109,11 +109,11 @@ fn proxima_nova_hebrew() {
     compare(
         CODEPOINTS,
         vec![
+            ("Hebrew", 88, 136),
+            ("Latin", 394, 1653),
+            ("Inherited", 22, 695),
             ("Common", 177, 9276),
             ("Greek", 1, 520),
-            ("Hebrew", 88, 136),
-            ("Inherited", 22, 695),
-            ("Latin", 394, 1653),
             ("Unknown", 4, 941239),
         ],
     );
@@ -126,11 +126,11 @@ fn proxima_nova_tamil() {
     compare(
         CODEPOINTS,
         vec![
+            ("Tamil", 72, 123),
+            ("Latin", 402, 1653),
+            ("Inherited", 22, 695),
             ("Common", 177, 9276),
             ("Greek", 1, 520),
-            ("Inherited", 22, 695),
-            ("Latin", 402, 1653),
-            ("Tamil", 72, 123),
             ("Unknown", 4, 941239),
         ],
     );
@@ -143,14 +143,26 @@ fn proxima_nova_thai() {
     compare(
         CODEPOINTS,
         vec![
+            ("Thai", 86, 86),
+            ("Latin", 384, 1653),
+            ("Inherited", 22, 695),
             ("Common", 176, 9276),
             ("Greek", 1, 520),
-            ("Inherited", 22, 695),
-            ("Latin", 384, 1653),
-            ("Thai", 86, 86),
             ("Unknown", 4, 941239),
         ],
     );
+}
+
+#[test]
+fn order() {
+    // All Gothic and Deseret letters are given along with a single Latin one.
+    let codes = Context::default()
+        .detect([[0x61, 0x61], [0x10330, 0x1034A], [0x10400, 0x1044F]], 0.0)
+        .into_iter()
+        .map(|script| script.code)
+        .collect::<Vec<_>>();
+    // The scripts that are equally covered are sorted by code.
+    assert_eq!(codes, ["Dsrt", "Goth", "Latn"]);
 }
 
 #[test]
@@ -160,7 +172,8 @@ fn threshold() {
     let codes = |threshold| {
         context
             .detect([[0x61, 0x61], [0x10330, 0x10349]], threshold)
-            .into_keys()
+            .into_iter()
+            .map(|script| script.code)
             .collect::<Vec<_>>()
     };
     assert_eq!(codes(0.0), ["Goth", "Latn"]);
@@ -171,10 +184,9 @@ fn threshold() {
 fn compare(codepoints: &str, expected: Vec<(&str, usize, usize)>) {
     let codepoints: Vec<Range> = ok!(serde_json::from_str(codepoints));
     let results = Context::default().detect(codepoints.into_iter().map(Into::into), 0.0);
-    let mut actual = results
-        .into_values()
+    let actual = results
+        .into_iter()
         .map(|script| (script.name, script.count, script.total))
         .collect::<Vec<_>>();
-    actual.sort();
     assert_eq!(actual, expected);
 }
